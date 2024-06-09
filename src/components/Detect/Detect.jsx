@@ -2,19 +2,13 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import "./Detect.css";
 import { v4 as uuidv4 } from "uuid";
 import { FilesetResolver, GestureRecognizer } from "@mediapipe/tasks-vision";
-import {
-  drawConnectors,
-  drawLandmarks,
-} from "@mediapipe/drawing_utils";
-
+import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
 import { HAND_CONNECTIONS } from "@mediapipe/hands";
-
 import Webcam from "react-webcam";
 import { SignImageData } from "../../data/SignImageData";
 import { useDispatch, useSelector } from "react-redux";
 import { addSignData } from "../../redux/actions/signdataaction";
 import ProgressBar from "./ProgressBar/ProgressBar";
-
 import DisplayImg from "../../assests/displayGif.gif";
 
 let startTime = "";
@@ -30,15 +24,12 @@ const Detect = () => {
 
   const requestRef = useRef();
   const lastSpokenWordRef = useRef("");
-
+  const lastDetectedTimeRef = useRef(Date.now());
   const [detectedData, setDetectedData] = useState([]);
 
   const user = useSelector((state) => state.auth?.user);
-
   const { accessToken } = useSelector((state) => state.auth);
-
   const dispatch = useDispatch();
-
   const [currentImage, setCurrentImage] = useState(null);
 
   useEffect(() => {
@@ -53,10 +44,7 @@ const Detect = () => {
     return () => clearInterval(intervalId);
   }, [webcamRunning]);
 
-  if (
-    process.env.NODE_ENV === "development" ||
-    process.env.NODE_ENV === "production"
-  ) {
+  if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "production") {
     console.log = function () {};
   }
 
@@ -109,22 +97,34 @@ const Detect = () => {
         drawLandmarks(canvasCtx, landmarks, { color: "#FF0000", lineWidth: 2 });
       }
     }
+
     if (results.gestures.length > 0) {
       const detectedSign = results.gestures[0][0].categoryName;
-      if (detectedSign !== lastSpokenWordRef.current) {
-        setDetectedData((prevData) => [
-          ...prevData,
-          {
-            SignDetected: detectedSign,
-          },
-        ]);
+      const detectedScore = Math.round(parseFloat(results.gestures[0][0].score) * 100);
 
-        setGestureOutput(detectedSign);
-        setProgress(Math.round(parseFloat(results.gestures[0][0].score) * 100));
+      const now = Date.now();
 
-        // Speak the detected sign
-        speak(detectedSign);
+      if (detectedSign === lastSpokenWordRef.current) {
+        if (now - lastDetectedTimeRef.current > 1000) { // 1 second delay
+          setDetectedData((prevData) => [
+            ...prevData,
+            {
+              SignDetected: detectedSign,
+              DetectedScore: detectedScore,
+            },
+          ]);
+
+          setGestureOutput(detectedSign);
+          setProgress(detectedScore);
+
+          // Speak the detected sign
+          speak(detectedSign);
+          lastSpokenWordRef.current = detectedSign;
+          lastDetectedTimeRef.current = now;
+        }
+      } else {
         lastSpokenWordRef.current = detectedSign;
+        lastDetectedTimeRef.current = now;
       }
     } else {
       setGestureOutput("");
@@ -153,11 +153,7 @@ const Detect = () => {
       setCurrentImage(null);
 
       const endTime = new Date();
-
-      const timeElapsed = (
-        (endTime.getTime() - startTime.getTime()) /
-        1000
-      ).toFixed(2);
+      const timeElapsed = ((endTime.getTime() - startTime.getTime()) / 1000).toFixed(2);
 
       // Remove empty values
       const nonEmptyData = detectedData.filter(
@@ -279,7 +275,7 @@ const Detect = () => {
                   </h3>
                 )}
              
-             </div>
+              </div>
             </div>
           </>
         ) : (
