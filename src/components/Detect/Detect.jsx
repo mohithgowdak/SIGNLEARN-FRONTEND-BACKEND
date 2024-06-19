@@ -105,7 +105,7 @@ const Detect = () => {
       const now = Date.now();
 
       if (detectedSign === lastSpokenWordRef.current) {
-        if (now - lastDetectedTimeRef.current > 1000) { // 1 second delay
+        if (now - lastDetectedTimeRef.current > 1000) { // 1 second delay 1000ms
           setDetectedData((prevData) => [
             ...prevData,
             {
