@@ -1,1 +1,9 @@
 node_modules
+# Ignore logs
+*.log
+
+# Ignore environment variables
+.env
+
+# Ignore sensitive configuration files
+firebase-debug.log
