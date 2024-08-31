@@ -28,8 +28,9 @@ export const login = () => async (dispatch) => {
       userId: res.additionalUserInfo.profile.id,
     };
     
-
-    Cookies.set('sign-language-ai-access-token', accessToken, { expires: 2 });
+// stores access token 
+    Cookies.set('sign-language-ai-access-token', accessToken, { expires: 2 });// expires in 2 days
+//  stores user information as json string   
     Cookies.set('sign-language-ai-user', JSON.stringify(profile) , { expires: 2 })
 
     dispatch({

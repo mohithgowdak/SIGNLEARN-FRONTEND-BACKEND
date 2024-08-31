@@ -15,11 +15,12 @@ import Cookies from "js-cookie";
 
 export const getSignData = () => async (dispatch) => {
   let signData = [];
+  // extracting the details from cookies
   const logedInUser = JSON.parse(Cookies.get("sign-language-ai-user"));
 
   async function getData(db) {
     const noteCol = collection(db, "SignData");
-    const userSpecificData = query(noteCol, where("userId", "==", logedInUser.userId));
+    const userSpecificData = query(noteCol, where("userId", "==", logedInUser.userId));// extracting only user id data
     const noteSnapshot = await getDocs(userSpecificData);
     const data = noteSnapshot.docs.map((doc) => doc.data());
     return data;
@@ -40,7 +41,7 @@ export const getSignData = () => async (dispatch) => {
 export const addSignData = (data) => async (dispatch) => {
   try {
     dispatch({ type: ADD_SIGN_DATA_REQ });
-    await setDoc(doc(db, "SignData", data.id), {
+    await setDoc(doc(db, "SignData", data.id), { // for each user a new documented is being created
       userId: data.userId,
       id: data.id,
       username: data.username,
@@ -70,7 +71,7 @@ export const getTopUsers = () => async (dispatch) => {
     dispatch({ type: GET_TOP_USERS_REQ });
     allData = await getData(db);
 
-    const groupedData = allData.reduce((acc, curr) => {
+    const groupedData = allData.reduce((acc, curr) => { // grouping based on username
       if (!acc[curr.username]) {
         acc[curr.username] = [];
       }

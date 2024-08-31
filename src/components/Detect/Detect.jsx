@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import "./Detect.css";
 import { v4 as uuidv4 } from "uuid";
-import { FilesetResolver, GestureRecognizer } from "@mediapipe/tasks-vision";
-import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
+import { FilesetResolver, GestureRecognizer } from "@mediapipe/tasks-vision";// media pipe task vision for hand gesture
+import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils"; // for drawing the hand signs on cam window
 import { HAND_CONNECTIONS } from "@mediapipe/hands";
 import Webcam from "react-webcam";
 import { SignImageData } from "../../data/SignImageData";
@@ -31,7 +31,7 @@ const Detect = () => {
   const { accessToken } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const [currentImage, setCurrentImage] = useState(null);
-
+ // this is basically used for displaying the sign image during recognition
   useEffect(() => {
     let intervalId;
     if (webcamRunning) {
@@ -43,14 +43,14 @@ const Detect = () => {
     }
     return () => clearInterval(intervalId);
   }, [webcamRunning]);
-
+// this is to work in production or development process
   if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "production") {
     console.log = function () {};
   }
 
   const speak = (text) => {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 1.2; // Adjust the speech rate if necessary
+    const utterance = new SpeechSynthesisUtterance(text);// web speech api interface used in text to voice.
+    utterance.rate = 1.2; // Adjust the speech rate if necessary. this is to change speed of voice
     speechSynthesis.speak(utterance);
   };
 
@@ -59,15 +59,15 @@ const Detect = () => {
       setRunningMode("VIDEO");
       gestureRecognizer.setOptions({ runningMode: "VIDEO" });
     }
-
+// here the hand gestures are recognized. with gesture recognizer.
     let nowInMs = Date.now();
     const results = gestureRecognizer.recognizeForVideo(
       webcamRef.current.video,
       nowInMs
     );
-
+//responsible for preparing the canvas for drawing new frames of the video and the detected hand landmarks.
     const canvasCtx = canvasRef.current.getContext("2d");
-    canvasCtx.save();
+    canvasCtx.save();// saving the state, in ordeer to clear this one has to use restore
     canvasCtx.clearRect(
       0,
       0,
@@ -103,7 +103,7 @@ const Detect = () => {
       const detectedScore = Math.round(parseFloat(results.gestures[0][0].score) * 100);
 
       const now = Date.now();
-
+// this is to make sure that speech is recognized with delay, we did this to remove voice lagging.
       if (detectedSign === lastSpokenWordRef.current) {
         if (now - lastDetectedTimeRef.current > 1000) { // 1 second delay 1000ms
           setDetectedData((prevData) => [
@@ -191,8 +191,9 @@ const Detect = () => {
 
       // object to send to action creator
       const data = {
-        signsPerformed: outputArray,
-        id: uuidv4(),
+        signsPerformed: outputArray,// this contains sign and count
+        id: uuidv4(),//uuidv4() is a function from the uuid
+        // library that generates a unique identifier (UUID) using version 4 of the UUID standard
         username: user?.name,
         userId: user?.userId,
         createdAt: String(endTime),
