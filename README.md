@@ -1,6 +1,6 @@
 # **Sign Language Recognition for Deaf and Dumb**
 
-![Banner](./public/banner.png)
+
 
 - Our sign language recognition project involved creating a custom dataset, preprocessing images, training a model, integrating with React, and hosting with Firebase. 
 
@@ -72,4 +72,4 @@
 - [mediapipe](https://developers.google.com/mediapipe)
 - [Firebase](https://firebase.google.com/)
 - [NPM](https://www.npmjs.com/)
->>>>>>> b06c1bcf11636a2a53d24c25112f60a5e53943a9:xxxxx
+
