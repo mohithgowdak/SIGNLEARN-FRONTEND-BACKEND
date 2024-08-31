@@ -56,22 +56,6 @@
 
 <<<<<<< HEAD:xxxx
 =======
-## Team Members
-
-- So this project is a group project done in collaboration with the members mentioned below.
-
-| Name            | Email-id                      |
-| :-------------- | :---------------------------- |
-| Shubham More    | `shubhamp1251@gmail.com`      |
-| Sameer Metkar   | `sameermetkar@gmail.com`      |
-| Omkar Mandavkar | `omkarmandavkar000@gmail.com` |
-| Durgesh Kolhe   | `dkolhe985@gmail.com`         |
-
-## Project Details
-
-- **Our Project Report:** [Report.pdf](https://drive.google.com/file/d/16juuwsmj64JJ915ghxV7OFlqKyAlTQpB/view?usp=share_link)
-
-- **Published Paper:** [Paper.pdf](https://drive.google.com/file/d/1QAuSWb8op7bFkqhItBbyoqwBbxWbSZvw/view?usp=share_link)
 
 - **Dataset Link:** [Sign_Dataset](https://drive.google.com/drive/folders/1LUUknqqRNHAmIZYrcgo-4n2HrM37uFa3?usp=share_link)
 
