@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import "./Detect.css";
 import { v4 as uuidv4 } from "uuid";
-import { FilesetResolver, GestureRecognizer } from "@mediapipe/tasks-vision";// media pipe task vision for hand gesture
+import { FilesetResolver, GestureRecognizer } from "@mediapipe/tasks-vision"; // media pipe task vision for hand gesture
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils"; // for drawing the hand signs on cam window
 import { HAND_CONNECTIONS } from "@mediapipe/hands";
 import Webcam from "react-webcam";
@@ -21,17 +21,17 @@ const Detect = () => {
   const [gestureRecognizer, setGestureRecognizer] = useState(null);
   const [runningMode, setRunningMode] = useState("IMAGE");
   const [progress, setProgress] = useState(0);
-
   const requestRef = useRef();
   const lastSpokenWordRef = useRef("");
   const lastDetectedTimeRef = useRef(Date.now());
   const [detectedData, setDetectedData] = useState([]);
+  const [signDetected, setSignDetected] = useState(false); // New state to track if a sign is detected
 
   const user = useSelector((state) => state.auth?.user);
   const { accessToken } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const [currentImage, setCurrentImage] = useState(null);
- // this is basically used for displaying the sign image during recognition
+
   useEffect(() => {
     let intervalId;
     if (webcamRunning) {
@@ -43,14 +43,14 @@ const Detect = () => {
     }
     return () => clearInterval(intervalId);
   }, [webcamRunning]);
-// this is to work in production or development process
+
   if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "production") {
     console.log = function () {};
   }
 
   const speak = (text) => {
-    const utterance = new SpeechSynthesisUtterance(text);// web speech api interface used in text to voice.
-    utterance.rate = 1.2; // Adjust the speech rate if necessary. this is to change speed of voice
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 1.2; // Adjust the speech rate if necessary
     speechSynthesis.speak(utterance);
   };
 
@@ -59,15 +59,15 @@ const Detect = () => {
       setRunningMode("VIDEO");
       gestureRecognizer.setOptions({ runningMode: "VIDEO" });
     }
-// here the hand gestures are recognized. with gesture recognizer.
+
     let nowInMs = Date.now();
     const results = gestureRecognizer.recognizeForVideo(
       webcamRef.current.video,
       nowInMs
     );
-//responsible for preparing the canvas for drawing new frames of the video and the detected hand landmarks.
+
     const canvasCtx = canvasRef.current.getContext("2d");
-    canvasCtx.save();// saving the state, in ordeer to clear this one has to use restore
+    canvasCtx.save();
     canvasCtx.clearRect(
       0,
       0,
@@ -78,15 +78,12 @@ const Detect = () => {
     const videoWidth = webcamRef.current.video.videoWidth;
     const videoHeight = webcamRef.current.video.videoHeight;
 
-    // Set video width
     webcamRef.current.video.width = videoWidth;
     webcamRef.current.video.height = videoHeight;
 
-    // Set canvas height and width
     canvasRef.current.width = videoWidth;
     canvasRef.current.height = videoHeight;
 
-    // Draw the results on the canvas, if any.
     if (results.landmarks) {
       for (const landmarks of results.landmarks) {
         drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, {
@@ -101,15 +98,16 @@ const Detect = () => {
     if (results.gestures.length > 0) {
       const detectedSign = results.gestures[0][0].categoryName;
       const detectedScore = Math.round(parseFloat(results.gestures[0][0].score) * 100);
+      setSignDetected(true); // Set signDetected to true when a sign is detected
 
       const now = Date.now();
-// this is to make sure that speech is recognized with delay, we did this to remove voice lagging.
+
       if (detectedSign === lastSpokenWordRef.current) {
-        if (now - lastDetectedTimeRef.current > 1000) { // 1 second delay 1000ms
+        if (now - lastDetectedTimeRef.current > 1000) {
           setDetectedData((prevData) => [
             ...prevData,
             {
-              SignDetected: detectedSign,
+              SignDetected: detectedSign ? detectedSign : null,
               DetectedScore: detectedScore,
             },
           ]);
@@ -117,7 +115,6 @@ const Detect = () => {
           setGestureOutput(detectedSign);
           setProgress(detectedScore);
 
-          // Speak the detected sign
           speak(detectedSign);
           lastSpokenWordRef.current = detectedSign;
           lastDetectedTimeRef.current = now;
@@ -155,12 +152,10 @@ const Detect = () => {
       const endTime = new Date();
       const timeElapsed = ((endTime.getTime() - startTime.getTime()) / 1000).toFixed(2);
 
-      // Remove empty values
       const nonEmptyData = detectedData.filter(
         (data) => data.SignDetected !== "" && data.DetectedScore !== ""
       );
 
-      //to filter continous same signs in an array
       const resultArray = [];
       let current = nonEmptyData[0];
 
@@ -173,7 +168,6 @@ const Detect = () => {
 
       resultArray.push(current);
 
-      //calculate count for each repeated sign
       const countMap = new Map();
 
       for (const item of resultArray) {
@@ -189,11 +183,9 @@ const Detect = () => {
         .slice(0, 5)
         .map(([sign, count]) => ({ SignDetected: sign, count }));
 
-      // object to send to action creator
       const data = {
-        signsPerformed: outputArray,// this contains sign and count
-        id: uuidv4(),//uuidv4() is a function from the uuid
-        // library that generates a unique identifier (UUID) using version 4 of the UUID standard
+        signsPerformed: outputArray,
+        id: uuidv4(),
         username: user?.name,
         userId: user?.userId,
         createdAt: String(endTime),
@@ -202,6 +194,7 @@ const Detect = () => {
 
       dispatch(addSignData(data));
       setDetectedData([]);
+      setSignDetected(false); // Reset the signDetected state when stopping the webcam
       lastSpokenWordRef.current = "";
     } else {
       setWebcamRunning(true);
@@ -252,7 +245,7 @@ const Detect = () => {
               <canvas ref={canvasRef} className="signlang_canvas" />
 
               <div className="signlang_data-container">
-                <button onClick={enableCam}>
+                <button onClick={enableCam} disabled={webcamRunning && !signDetected}>
                   {webcamRunning ? "Stop" : "Start"}
                 </button>
 
@@ -275,7 +268,6 @@ const Detect = () => {
                     Click on the Start Button <br /> to practice with Images
                   </h3>
                 )}
-             
               </div>
             </div>
           </>
