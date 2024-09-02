@@ -1,6 +1,6 @@
 # **Sign Language Recognition for Deaf and Dumb**
 
-![Banner](./public/banner.png)
+
 
 - Our sign language recognition project involved creating a custom dataset, preprocessing images, training a model, integrating with React, and hosting with Firebase. 
 
@@ -56,22 +56,6 @@
 
 <<<<<<< HEAD:xxxx
 =======
-## Team Members
-
-- So this project is a group project done in collaboration with the members mentioned below.
-
-| Name            | Email-id                      |
-| :-------------- | :---------------------------- |
-| Shubham More    | `shubhamp1251@gmail.com`      |
-| Sameer Metkar   | `sameermetkar@gmail.com`      |
-| Omkar Mandavkar | `omkarmandavkar000@gmail.com` |
-| Durgesh Kolhe   | `dkolhe985@gmail.com`         |
-
-## Project Details
-
-- **Our Project Report:** [Report.pdf](https://drive.google.com/file/d/16juuwsmj64JJ915ghxV7OFlqKyAlTQpB/view?usp=share_link)
-
-- **Published Paper:** [Paper.pdf](https://drive.google.com/file/d/1QAuSWb8op7bFkqhItBbyoqwBbxWbSZvw/view?usp=share_link)
 
 - **Dataset Link:** [Sign_Dataset](https://drive.google.com/drive/folders/1LUUknqqRNHAmIZYrcgo-4n2HrM37uFa3?usp=share_link)
 
@@ -88,4 +72,4 @@
 - [mediapipe](https://developers.google.com/mediapipe)
 - [Firebase](https://firebase.google.com/)
 - [NPM](https://www.npmjs.com/)
->>>>>>> b06c1bcf11636a2a53d24c25112f60a5e53943a9:xxxxx
+
