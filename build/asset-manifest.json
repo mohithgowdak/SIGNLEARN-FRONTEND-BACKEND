@@ -1,0 +1,37 @@
+{
+  "files": {
+    "main.css": "/static/css/main.700f315b.css",
+    "main.js": "/static/js/main.82c732e4.js",
+    "static/media/SignHand.png": "/static/media/SignHand.e09e6c4aa7323fdccbc6.png",
+    "static/media/Working.png": "/static/media/Working.10bc077954ddcf486a6e.png",
+    "static/media/NOTOK.png": "/static/media/NOTOK.d6c154d5284d125a2709.png",
+    "static/media/DEAF.png": "/static/media/DEAF.8b872e18b666ba10be0f.png",
+    "static/media/THANKYOU.png": "/static/media/THANKYOU.82c0915664e3e6e7fcd0.png",
+    "static/media/PLEASE.png": "/static/media/PLEASE.464aa67195e60e1196be.png",
+    "static/media/HELLO.png": "/static/media/HELLO.2b220904832cc6d9c74c.png",
+    "static/media/OK.png": "/static/media/OK.52947b9458be6a7307ce.png",
+    "static/media/NAME.png": "/static/media/NAME.2bb4134c80e56e394795.png",
+    "static/media/YES.png": "/static/media/YES.c0b54314b3cdb270ad2c.png",
+    "static/media/ME.png": "/static/media/ME.dea4870c71f6ff9a8e1c.png",
+    "static/media/ILOVEYOU.png": "/static/media/ILOVEYOU.fa5565f5bbcea677d1cc.png",
+    "static/media/MEET.png": "/static/media/MEET.efe573831661dbd551fc.png",
+    "static/media/LEARN.png": "/static/media/LEARN.4ef583d20876ec2305e1.png",
+    "static/media/BYE.png": "/static/media/BYE.08f0139e41a43187d6bd.png",
+    "static/media/No-data.svg": "/static/media/No-data.b66445315ab372f801c695d8b7ffad8a.svg",
+    "static/media/NO.png": "/static/media/NO.2c1d0d4577974a79d7b3.png",
+    "static/media/logo2.png": "/static/media/logo2.2818fed5c1905b312a19.png",
+    "static/media/TELL.png": "/static/media/TELL.a024f947be139e4b8f4d.png",
+    "static/media/I.png": "/static/media/I.81305d0fadf4653cb873.png",
+    "static/media/404.svg": "/static/media/404.9acb26fbdbb6fc1498e123a2cf4d4e95.svg",
+    "static/media/logo.png": "/static/media/logo.a813e549a697221f45d1.png",
+    "static/media/V.png": "/static/media/V.309162d79bd7fa5e07e8.png",
+    "static/media/Spinner.svg": "/static/media/Spinner.f6df05df52b185b737b63c58f3dc02c9.svg",
+    "index.html": "/index.html",
+    "main.700f315b.css.map": "/static/css/main.700f315b.css.map",
+    "main.82c732e4.js.map": "/static/js/main.82c732e4.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.700f315b.css",
+    "static/js/main.82c732e4.js"
+  ]
+}
