@@ -16,10 +16,11 @@ export const login = () => async (dispatch) => {
       type: LOGIN_REQ,
     });
 
-    const provider = new firebase.auth.GoogleAuthProvider();
+    //const provider = new firebase.auth.GoogleAuthProvider();
     
-    const res = await auth.signInWithPopup(provider);
-
+    //const res = await auth.signInWithPopup(provider);
+    var res = await firebase.auth().signInWithPopup(
+      new firebase.auth.GoogleAuthProvider());
     const accessToken = res.credential.accessToken;
 
     const profile = {
